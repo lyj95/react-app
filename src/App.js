@@ -5,34 +5,57 @@ import Content from './compoents/Content'
 import TOC from './compoents/TOC'
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       mode: 'welcome',
-      subject:{title:'WEB', sub:"world wide web!"},
-      welcome: {title:'welcome', desc:'hello react!'},
-      content:[
-        {id:1, title:'HTML', desc:'hititi!!'},
-        {id:2, title:'CSS', desc:'222hititi!!'},
-        {id:3, title:'Java script', desc:'333hititi!!'}
+      subject: { title: 'WEB', sub: "world wide web!" },
+      welcome: { title: 'welcome', desc: 'hello react!' },
+      content: [
+        { id: 1, title: 'HTML', desc: 'hititi!!' },
+        { id: 2, title: 'CSS', desc: '222hititi!!' },
+        { id: 3, title: 'Java script', desc: '333hititi!!' }
       ]
     };
   }
-
-  render(){
+  render() {
     let _title, _desc = null;
-    if(this.state.mode === 'welcome'){
+    if (this.state.mode === 'welcome') {
       _title = this.state.welcome.title;
       _desc = this.state.welcome.desc;
-    }else if(this.state.mode === 'read'){
-      _title = "read";
-      _desc = "only read!!"
+    } else if (this.state.mode === 'read') {
+      let i = 0;
+      while(i < this.state.content[i]){
+        let data = this.state.content[i];
+        if(data.id === this.state.selected_content_id){
+          _title = data.title;
+          _desc = data.desc;
+          break;
+        }
+        i = i +1;
+      }
     }
-    return(
+    return (
       <div className='App'>
         <Subject title={this.state.subject.title} sub={this.state.subject.sub}></Subject>
-        <Subject title="HI" sub="HI!"></Subject>
-        <TOC data={this.state.content}></TOC>
+        <Subject
+          title={this.state.subject.title}
+          sub={this.state.subject.sub}
+          onChangPage={function () {
+            // alert('hititi');
+            this.setState({ mode: 'read' });
+          }.bind(this)}
+        ></Subject>
+        <TOC
+          onChangePage={function (id) {
+            alert('hi');
+            this.setState({
+              mode: 'read',
+              selected_content_id: Number(id)
+            });
+          }.bind(this)}
+          data = {this.state.content}
+        ></TOC>
         <Content title={_title} desc={_desc}></Content>
       </div>
     )
