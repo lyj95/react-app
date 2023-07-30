@@ -10,11 +10,12 @@ class TOC extends Component {
         <a
           href={"/contents/" + data[i].id}
           data-id={data[i].id}
-          onClick={function (id, num, e) {
+          onClick={function (e) {
             // debugger;   // debug에서 멈춤
             e.preventDefault();
             this.props.onChangePage(e.target.dataset.id);
-          }.bind(this, data[i].id, 10)}
+            // this.props.onChangePage(id);
+          }.bind(this)}
         >
           {data[i].title}
         </a>

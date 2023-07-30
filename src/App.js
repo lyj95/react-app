@@ -25,7 +25,7 @@ class App extends Component {
       _desc = this.state.welcome.desc;
     } else if (this.state.mode === 'read') {
       let i = 0;
-      while(i < this.state.content[i]){
+      while(i < this.state.content[i].id){
         let data = this.state.content[i];
         if(data.id === this.state.selected_content_id){
           _title = data.title;
@@ -37,18 +37,17 @@ class App extends Component {
     }
     return (
       <div className='App'>
-        <Subject title={this.state.subject.title} sub={this.state.subject.sub}></Subject>
         <Subject
-          title={this.state.subject.title}
-          sub={this.state.subject.sub}
-          onChangPage={function () {
+          title={this.state.subject.title} 
+          sub={this.state.subject.sub} 
+          onChangePage={function () {
             // alert('hititi');
-            this.setState({ mode: 'read' });
-          }.bind(this)}
+            this.setState({ mode: 'welcome' });
+          }.bind(this)} 
         ></Subject>
         <TOC
           onChangePage={function (id) {
-            alert('hi');
+            // alert('hi');
             this.setState({
               mode: 'read',
               selected_content_id: Number(id)
