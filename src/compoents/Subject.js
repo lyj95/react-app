@@ -4,7 +4,7 @@ class Subject extends Component {
   render() {
     return (
       <div>
-        <h1><a href="" onClick={function (e) {
+        <h1><a href="/subject" onClick={function (e) {
           e.preventDefault();
           this.props.onChangePage();
         }.bind(this)}
