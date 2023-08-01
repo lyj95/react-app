@@ -22,20 +22,20 @@ class App extends Component {
       ]
     };
   }
-  getReadContent(){
+  getReadContent() {
     let i = 0;
-    while(i < this.state.content[i].id){
+    while (i < this.state.content[i].id) {
       let data = this.state.content[i];
-      if(data.id === this.state.selected_content_id){
+      if (data.id === this.state.selected_content_id) {
         return data;
         // _title = data.title;
         // _desc = data.desc;
         // _article = <ReadContent title={_title} desc={_desc}></ReadContent>
       }
-      i = i +1;
+      i = i + 1;
     }
   }
-  getContent(){
+  getContent() {
     let _title, _desc, _article = null;
     if (this.state.mode === 'welcome') {
       _title = this.state.welcome.title;
@@ -45,8 +45,8 @@ class App extends Component {
       const _content = this.getReadContent();
       _article = <ReadContent title={_content.title} desc={_content.desc}></ReadContent>
 
-    } else if (this.state.mode === 'create'){
-      _article = <CreateContent onSubmit={function(_title, _desc){
+    } else if (this.state.mode === 'create') {
+      _article = <CreateContent onSubmit={function (_title, _desc) {
         this.max_content_id = this.max_content_id + 1;
 
         // state 값을 변경할 땐 복제본을 변경하는 것이 좋다 !?
@@ -55,7 +55,7 @@ class App extends Component {
         // )
 
         let _content = Array.from(this.state.content);
-        _content.push({id:this.max_content_id, title:_title, desc:_desc});
+        _content.push({ id: this.max_content_id, title: _title, desc: _desc });
         this.setState({
           content: _content,
           mode: 'read',
@@ -63,15 +63,15 @@ class App extends Component {
         })
 
       }.bind(this)}></CreateContent>
-    } else if (this.state.mode === 'update'){
+    } else if (this.state.mode === 'update') {
       const _content = this.getReadContent();
-      _article = <UpdateContent data={_content} onSubmit={function(_id, _title, _desc){
+      _article = <UpdateContent data={_content} onSubmit={function (_id, _title, _desc) {
 
         let _content = Array.from(this.state.content);
         let i = 0;
-        while(i < _content.length){
-          if( _content[i].id === _id){
-            _content[i] = {id:_id, title: _title, desc: _desc}
+        while (i < _content.length) {
+          if (_content[i].id === _id) {
+            _content[i] = { id: _id, title: _title, desc: _desc }
             break;
           }
           i = i + 1;
@@ -86,16 +86,16 @@ class App extends Component {
     return _article;
   }
   render() {
-    
+
     return (
       <div className='App'>
         <Subject
-          title={this.state.subject.title} 
-          sub={this.state.subject.sub} 
+          title={this.state.subject.title}
+          sub={this.state.subject.sub}
           onChangePage={function () {
             // alert('hititi');
             this.setState({ mode: 'welcome' });
-          }.bind(this)} 
+          }.bind(this)}
         ></Subject>
         <TOC
           onChangePage={function (id) {
@@ -105,15 +105,34 @@ class App extends Component {
               selected_content_id: Number(id)
             });
           }.bind(this)}
-          data = {this.state.content}
+          data={this.state.content}
         ></TOC>
-        <Control onChangeMode={function(_mode){
-          this.setState({
-            mode: _mode
-          })
+        <Control onChangeMode={function (_mode) {
+          if (_mode === 'delete') {
+            if (window.confirm('really?')) {
+              let i = 0;
+              let _content = Array.from(this.state.content);
+              while(i < this.state.content.length){
+                if(_content[i].id === this.state.selected_content_id){
+                  _content.splice(i,1);
+                  break;
+                }
+                i = i+1;
+              }
+              this.setState({
+                mode: 'welcome',
+                content: _content
+              });
+              alert('deleted!')
+            }
+          } else {
+            this.setState({
+              mode: _mode
+            });
+          }
         }.bind(this)}></Control>
         {this.getContent()}
-      </div>
+      </div >
     )
   }
 }
